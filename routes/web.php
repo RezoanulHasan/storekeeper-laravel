@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SaleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ProductController::class, 'index'])->name('dashboard');
+Route::resource('products', ProductController::class);
+Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
+
