@@ -11,12 +11,12 @@ use Carbon\Carbon;
 class ProductController extends Controller
 {
     public function dashboard()
-    {
+    { $product = Product::first(); 
         // Logic to get sales figures for today, yesterday, this month, and last month
         $todaySales = Sale::whereDate('created_at', today())->sum('amount');
         $yesterdaySales = Sale::whereDate('created_at', today()->subDay())->sum('amount');
-        $thisMonthSales = Sale::whereMonth('created_at', today()->month)->sum('amount');
-        $lastMonthSales = Sale::whereMonth('created_at', today()->subMonth())->sum('amount');
+        $thisMonthSales = Sale::whereMonth('created_at', now()->month)->sum('amount');
+        $lastMonthSales = Sale::whereMonth('created_at', now()->subMonth())->sum('amount');
 
         return view('dashboard', compact('todaySales', 'yesterdaySales', 'thisMonthSales', 'lastMonthSales'));
     }
