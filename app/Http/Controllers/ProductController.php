@@ -5,46 +5,92 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function dashboard()
+    {
+        // Logic to get sales figures for today, yesterday, this month, and last month
+        $todaySales = Sale::whereDate('created_at', today())->sum('amount');
+        $yesterdaySales = Sale::whereDate('created_at', today()->subDay())->sum('amount');
+        $thisMonthSales = Sale::whereMonth('created_at', today()->month)->sum('amount');
+        $lastMonthSales = Sale::whereMonth('created_at', today()->subMonth())->sum('amount');
+
+        return view('dashboard', compact('todaySales', 'yesterdaySales', 'thisMonthSales', 'lastMonthSales'));
+    }
+    public function all()
     {
         $products = Product::all();
-        return view('dashboard', compact('products'));
+        return view('products.all', compact('products'));
     }
 
-    public function create()
+
+    public function showCreateProductForm()
     {
-        return view('products.create');
+        return view('create-product');
     }
 
-    public function store(Request $request)
+ 
+    public function create(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+        $request->validate([
+            'name' => 'required',
             'price' => 'required|numeric',
             'quantity' => 'required|integer',
         ]);
-
-        Product::create($validatedData);
-
-        return redirect()->route('dashboard')->with('success', 'Product added successfully');
-    }
-
-    public function edit(Product $product)
-    {
-        return view('products.edit', compact('product'));
-    }
-
-    public function update(Request $request, Product $product)
-    {
-        $validatedData = $request->validate([
-            'price' => 'required|numeric',
+    
+        $product = Product::create([
+            'name' => $request->input('name'),
+            'price' => $request->input('price'),
+            'quantity' => $request->input('quantity'),
         ]);
+    
+        return redirect()->route('products.all')->with('success', 'Product created successfully.');
+    }
+    
 
-        $product->update(['price' => $validatedData['price']]);
 
-        return redirect()->route('dashboard')->with('success', 'Product price updated successfully');
+
+
+
+    public function show($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('products.show', compact('product'));
+    }
+
+    public function editPrice($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('products.edit-price', compact('product'));
+    }
+
+    public function updatePrice(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+        $product->update(['price' => $request->input('price')]);
+
+        return redirect()->route('products.all')->with('success', 'Product price updated successfully.');
+    }
+
+    public function sellProduct(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
+        if ($product->quantity >= $request->input('quantity')) {
+            $sale = Sale::create([
+                'product_id' => $product->id,
+                'quantity' => $request->input('quantity'),
+                'amount' => $product->price * $request->input('quantity'),
+            ]);
+
+            $product->decrement('quantity', $request->input('quantity'));
+
+            return redirect()->route('products.all')->with('success', 'Product sold successfully.');
+        } else {
+            return redirect()->route('products.all')->with('error', 'Not enough quantity in stock.');
+        }
     }
 }

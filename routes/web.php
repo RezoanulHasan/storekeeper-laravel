@@ -15,7 +15,14 @@ use App\Http\Controllers\SaleController;
 |
 */
 
-Route::get('/', [ProductController::class, 'index'])->name('dashboard');
-Route::resource('products', ProductController::class);
-Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
 
+
+Route::get('/', [ProductController::class, 'dashboard'])->name('dashboard');
+Route::get('/products', [ProductController::class, 'all'])->name('products.all');
+Route::post('/products/create', [ProductController::class, 'create'])->name('products.create');
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/products/{id}/edit-price', [ProductController::class, 'editPrice'])->name('products.editPrice');
+Route::put('/products/{id}/update-price', [ProductController::class, 'updatePrice'])->name('products.updatePrice');
+Route::post('/products/{id}/sell', [ProductController::class, 'sellProduct'])->name('products.sellProduct');
+Route::get('/sales', [SaleController::class, 'allsales'])->name('sales.allsales');
+Route::get('/create', [ProductController::class, 'showCreateProductForm'])->name('create');;

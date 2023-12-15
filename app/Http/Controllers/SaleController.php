@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sale;
-use Illuminate\Http\Request;
 
 class SaleController extends Controller
 {
-    public function index()
+    public function allsales()
     {
         $sales = Sale::all();
-        return view('sales.index', compact('sales'));
+        return view('sales.allsales', compact('sales'));
     }
 }
