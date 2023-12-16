@@ -58,7 +58,7 @@
 - **Controller Method:** `allsales`
 - **Description:** Displays a list of all sales.
 
-## 
+## Run locally 
 - Clone the repository
 - npm run dev
 - php artisan serve
