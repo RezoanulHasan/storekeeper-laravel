@@ -3,10 +3,18 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="mb-4 flex justify-between items-center">
-        <h2 class="text-2xl font-semibold">All Products</h2>
-        <a href="{{ route('create') }}" class="text-blue-500 mb-10">Create Product</a>
+    <div class=" mb-10 mt-10  ">
+        <h2 class="text-2xl text-center font-semibold">All Products</h2>
+      
     </div>
+
+    <div class=" mb-5 mt-5  text-center  ">
+    
+        <a href="{{ route('create') }}" class="text-red-500  front-bold text-xl">Create Product</a>
+    </div>
+
+
+
 
     @if(session('success'))
         <div class="bg-green-200 text-green-800 p-2 mb-4">
@@ -42,9 +50,9 @@
     <a href="{{ route('products.editPrice', $product->id) }}" class="text-blue-500">Edit Price</a>
     @if ($product->quantity > 0)
 
-    <a href="{{ route('products.showSellProductForm', $product->id) }}" class="text-red-500 mx-7">Sell</a>
+  <a href="{{ route('products.showSellProductForm', $product->id) }}" class="text-red-500 mx-7"> Sales  Now</a>
 
-      
+
     @else
         <span class="text-gray-500 mx-7">No stock available</span>
     @endif
