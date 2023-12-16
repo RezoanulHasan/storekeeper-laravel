@@ -25,4 +25,5 @@ Route::get('/products/{id}/edit-price', [ProductController::class, 'editPrice'])
 Route::put('/products/{id}/update-price', [ProductController::class, 'updatePrice'])->name('products.updatePrice');
 Route::post('/products/{id}/sell', [ProductController::class, 'sellProduct'])->name('products.sellProduct');
 Route::get('/sales', [SaleController::class, 'allsales'])->name('sales.allsales');
-Route::get('/create', [ProductController::class, 'showCreateProductForm'])->name('create');;
+Route::get('/create', [ProductController::class, 'showCreateProductForm'])->name('create');
+Route::get('/products/{id}/sell', [ProductController::class, 'showSellProductForm'])->name('products.showSellProductForm');

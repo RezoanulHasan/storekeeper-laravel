@@ -39,12 +39,13 @@
                         <td class="py-2 px-4 border-b">{{ $product->price }}</td>
                         <td class="py-2 px-4 border-b">{{ $product->quantity }}</td>
                         <td class="py-2 px-4 border-b">
-                            <a href="{{ route('products.editPrice', $product->id) }}" class="text-blue-500">Edit Price</a>
-                       
-                        </td>
-                        <td class="py-2 px-4 border-b">
-                            <button class="text-red-500" onclick="sellProduct({{ $product->id }}, '{{ $product->name }}', {{ $product->price }}, {{ $product->quantity }})">Sell</button>
-                        </td>
+    <a href="{{ route('products.editPrice', $product->id) }}" class="text-blue-500">Edit Price</a>
+    @if ($product->quantity > 0)
+        <button class="text-red-500 mx-7" onclick="sellProduct({{ $product->id }}, '{{ $product->name }}', {{ $product->price }}, {{ $product->quantity }})">Sell</button>
+    @else
+        <span class="text-gray-500 mx-7">No stock available</span>
+    @endif
+</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -52,74 +53,6 @@
     @else
         <p>No products available. <a href="{{ route('create') }}" class="text-blue-500">Create a product</a>.</p>
     @endif
+    
+    
 
-       <!-- Modal -->
-       <div id="sellModal" class="fixed hidden inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white p-8 rounded-lg">
-            <h3 class="text-xl font-semibold mb-4" id="modalTitle">Sell Product</h3>
-            <p id="modalContent"></p>
-            <div class="mt-4 flex justify-end">
-                <button class="text-red-500" onclick="confirmSell()">Confirm</button>
-                <button class="ml-4" onclick="closeModal()">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function sellProduct(productId, productName, productPrice, productQuantity) {
-            var modal = document.getElementById('sellModal');
-            var modalTitle = document.getElementById('modalTitle');
-            var modalContent = document.getElementById('modalContent');
-
-            modalTitle.textContent = `Sell ${productName}`;
-            modalContent.innerHTML = `<p>ID: ${productId}</p>
-                                      <p>Name: ${productName}</p>
-                                      <p>Price: ${productPrice}</p>
-                                      <p>Quantity: ${productQuantity}</p>`;
-
-            modal.classList.remove('hidden');
-        }
-
-        function confirmSell() {
-            // Fetch CSRF token (adjust if your setup is different)
-            var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            // Get product ID from the modal content
-            var productId = parseInt(document.getElementById('modalContent').querySelector('p[ID]').textContent.split(": ")[1]);
-
-            // Make an AJAX request to update the database
-            fetch(`/sell-product/${productId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                body: JSON.stringify({}),
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response, e.g., show success message
-                alert('Product sold successfully!');
-
-                // Close the modal after handling the sell operation
-                closeModal();
-
-                // Reload the page to update the product list (you can use a more efficient approach if using frontend frameworks)
-                location.reload();
-            })
-            .catch(error => {
-                // Handle errors, e.g., show an error message
-                alert('Error selling the product.');
-                console.error('Error:', error);
-
-                // Close the modal after handling the error
-                closeModal();
-            });
-        }
-
-        function closeModal() {
-            var modal = document.getElementById('sellModal');
-            modal.classList.add('hidden');
-        }
-    </script>
-@endsection

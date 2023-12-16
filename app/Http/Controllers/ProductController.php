@@ -11,7 +11,8 @@ use Carbon\Carbon;
 class ProductController extends Controller
 {
     public function dashboard()
-    { $product = Product::first(); 
+    { 
+        $product = Product::first(); 
         // Logic to get sales figures for today, yesterday, this month, and last month
         $todaySales = Sale::whereDate('created_at', today())->sum('amount');
         $yesterdaySales = Sale::whereDate('created_at', today()->subDay())->sum('amount');
@@ -20,19 +21,21 @@ class ProductController extends Controller
 
         return view('dashboard', compact('todaySales', 'yesterdaySales', 'thisMonthSales', 'lastMonthSales'));
     }
+
+    //all product show
     public function all()
     {
         $products = Product::all();
         return view('products.all', compact('products'));
     }
 
-
+  //create product 
     public function showCreateProductForm()
     {
         return view('create-product');
     }
 
- 
+ // store product
     public function create(Request $request)
     {
         $request->validate([
@@ -53,7 +56,7 @@ class ProductController extends Controller
 
 
 
-
+// show product by id
 
     public function show($id)
     {
@@ -75,6 +78,9 @@ class ProductController extends Controller
         return redirect()->route('products.all')->with('success', 'Product price updated successfully.');
     }
 
+
+
+
     public function sellProduct(Request $request, $id)
     {
         $product = Product::findOrFail($id);
@@ -93,4 +99,15 @@ class ProductController extends Controller
             return redirect()->route('products.all')->with('error', 'Not enough quantity in stock.');
         }
     }
+
+
+    
+    public function showSellProductForm($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('sell-product', compact('product'));
+   
+
+    }
+
 }
