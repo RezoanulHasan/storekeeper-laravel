@@ -29,6 +29,6 @@
             </tbody>
         </table>
     @else
-        <p>No sales data available.</p>
+        <p>No sales data available</p>
     @endif
 @endsection

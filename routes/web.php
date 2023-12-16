@@ -19,9 +19,6 @@ use App\Http\Controllers\SaleController;
 
 Route::get('/', [ProductController::class, 'dashboard'])->name('dashboard');
 
-
-
-
 Route::post('/products/create', [ProductController::class, 'create'])->name('products.create');
 Route::get('/create', [ProductController::class, 'showCreateProductForm'])->name('create');
 Route::get('/products', [ProductController::class, 'all'])->name('products.all');
