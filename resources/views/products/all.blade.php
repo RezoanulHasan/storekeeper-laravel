@@ -41,7 +41,10 @@
                         <td class="py-2 px-4 border-b">
     <a href="{{ route('products.editPrice', $product->id) }}" class="text-blue-500">Edit Price</a>
     @if ($product->quantity > 0)
-        <button class="text-red-500 mx-7" onclick="sellProduct({{ $product->id }}, '{{ $product->name }}', {{ $product->price }}, {{ $product->quantity }})">Sell</button>
+
+    <a href="{{ route('products.showSellProductForm', $product->id) }}" class="text-red-500 mx-7">Sell</a>
+
+      
     @else
         <span class="text-gray-500 mx-7">No stock available</span>
     @endif
