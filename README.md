@@ -1,10 +1,8 @@
-# Project Name README
+# storekeeper-laravel
 
-## Introduction
 
-This README provides an overview of the project and instructions on how to use and understand the provided routes.
 
-## Routes
+## API Routes
 
 ### Dashboard
 
@@ -60,11 +58,11 @@ This README provides an overview of the project and instructions on how to use a
 - **Controller Method:** `allsales`
 - **Description:** Displays a list of all sales.
 
-## Usage
+## 
+- Clone the repository
+- npm run dev
+- php artisan serve
 
-1. Clone the repository.
 
-```bash
-git clone <repository-url>
 
 
